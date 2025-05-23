@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 100;
@@ -51,10 +51,5 @@ public class PlayerHealth : MonoBehaviour
             if (restartButton != null)
                 restartButton.SetActive(true);
         }
-    }
-
-    public void RestartLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

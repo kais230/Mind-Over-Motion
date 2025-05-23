@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemySwordHitbox : MonoBehaviour
 {
-     private int swordDamage = 10;
+     private int swordDamage = 100;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
