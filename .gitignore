@@ -1,0 +1,37 @@
+# ─── Unity Cache & Build Folders ──────────────────────────────────────────
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# ─── Assets Folder: ignore everything … ───────────────────────────────────
+Assets/**
+
+# … but keep your C# scripts (and folders you choose)
+!Assets/Scripts/
+!Assets/Scripts/**
+
+# (If you have other code under Plugins, or Editor tools, un-ignore them too)
+!Assets/Plugins/
+!Assets/Plugins/**
+
+# ─── Project Settings & Packages (you want these!) ────────────────────────
+# (no ignore here → they’ll be tracked)
+
+# ─── Auto-generated IDE files ─────────────────────────────────────────────
+*.csproj
+*.sln
+*.unityproj
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.svd
+
+# ─── OS files ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
