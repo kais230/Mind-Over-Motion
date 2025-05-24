@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private LayerMask slopeLayer;
     //private bool isGrounded = false; // Tracks if the player is on the ground
+    private bool isKnockedBack = false;
+    [Header("Knockback Settings")]
+    [SerializeField] private float knockbackDuration = 0.3f;
+    private Coroutine knockbackRoutine;
 
     float horizontalInput;
   
@@ -36,40 +41,43 @@ public class PlayerController : MonoBehaviour
         else if(horizontalInput < -0.01f)
             transform.localScale = new Vector3(-1, 1, 1); // Face left
 
-        if (!IsGrounded() && OnWall())
+        if (!isKnockedBack)
         {
-            body.linearVelocity= new Vector2(0, body.linearVelocity.y); // Cancel horizontal movement
-        }
-        else
-        {
-            body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
-        }
-        // Jumping (only when grounded)
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            if(IsGrounded())
+            if (!IsGrounded() && OnWall())
             {
-                Jump();
+                body.linearVelocity = new Vector2(0, body.linearVelocity.y); // Cancel horizontal movement
             }
-            // else if(OnWall() && wallJumpCounter <= maxWallJumpCounter)
-            // {
-            //     wallJumpCounter++;
-            //     Jump();
-            // }
+            else
+            {
+                body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
+            }
+            // Jumping (only when grounded)
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (IsGrounded())
+                {
+                    Jump();
+                }
+                // else if(OnWall() && wallJumpCounter <= maxWallJumpCounter)
+                // {
+                //     wallJumpCounter++;
+                //     Jump();
+                // }
+            }
         }
 
         // Detect falling
-        if (body.linearVelocity.y < 0 && !IsGrounded())
-        {
-            anim.SetBool("Fall", true);
-        }
-        else
-        {
-            anim.SetBool("Fall", false);
-        }
+            if (body.linearVelocity.y < 0 && !IsGrounded())
+            {
+                anim.SetBool("Fall", true);
+            }
+            else
+            {
+                anim.SetBool("Fall", false);
+            }
 
         // Animation states
-        if (IsGrounded())
+        if (IsGrounded() && !isKnockedBack)
         {
             if (horizontalInput == 0)
                 anim.SetInteger("AnimState", 0); // Idle
@@ -126,10 +134,27 @@ public class PlayerController : MonoBehaviour
     }
 
 
-private void Die()
-{
-    // Disable player movement (or restart level)
-    gameObject.SetActive(false);  
-    // TODO: Add respawn or game over screen
-}
+    public void Knockback(Vector2 direction, float force)
+    {
+        if (knockbackRoutine != null) return;
+        knockbackRoutine = StartCoroutine(KnockbackRoutine(direction.normalized * force));
+    }
+
+    private IEnumerator KnockbackRoutine(Vector2 velocity)
+    {
+        isKnockedBack = true;
+        anim.SetTrigger("Hurt");           // optional hurt animation
+        body.linearVelocity = velocity;
+
+        yield return new WaitForSeconds(knockbackDuration);
+
+        isKnockedBack = false;
+        knockbackRoutine = null;
+    }
+    private void Die()
+    {
+        // Disable player movement (or restart level)
+        gameObject.SetActive(false);
+        // TODO: Add respawn or game over screen
+    }
 }

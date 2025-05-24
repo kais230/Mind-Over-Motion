@@ -99,5 +99,10 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("Player hit an enemy!");
             collision.gameObject.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
+        else if (collision.CompareTag("Boss") && isAttacking)
+        {
+            collision.GetComponent<DragonBossController>()
+             ?.TakeDamage((int)attackDamage);
+        }
     }
 }
