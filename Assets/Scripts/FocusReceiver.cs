@@ -67,7 +67,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-
+using System; // for DateTime
 public class FocusReceiver : MonoBehaviour
 {
     UdpClient client;
@@ -81,9 +81,14 @@ public class FocusReceiver : MonoBehaviour
     // ← new flag to control the receive loop
     private volatile bool running = false;
 
+     public float disconnectTimeout = 5f;
+
+    private DateTime lastReceiveUtc;
+
     void Start()
     {
         instance = this;
+        lastReceiveUtc = DateTime.UtcNow;
 
         client = new UdpClient(5005);
 
@@ -111,6 +116,7 @@ public class FocusReceiver : MonoBehaviour
 
                 Debug.Log("Focus score received: " + focusScore);
                 isConnected = true;
+                lastReceiveUtc = DateTime.UtcNow;
             }
             catch (SocketException se)
             {
@@ -131,6 +137,16 @@ public class FocusReceiver : MonoBehaviour
         }
 
         // Thread will exit here cleanly
+    }
+
+     void Update()
+    {
+        // if we were connected but haven't seen data recently, drop the flag
+        if (isConnected && (DateTime.UtcNow - lastReceiveUtc).TotalSeconds > disconnectTimeout)
+        {
+            Debug.LogWarning("No EEG data for " + disconnectTimeout + "s – marking disconnected");
+            isConnected = false;
+        }
     }
 
     private void ShutdownReceiver()

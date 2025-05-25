@@ -22,7 +22,7 @@ public class DragonBossController : MonoBehaviour
     [Header("Knockback")]
     [Tooltip("How hard the player is pushed away (Impulse)")]
     public float knockbackForce = 10f;
-    private bool isAttacking = false; // to prevent multiple hits in one breath
+    //private bool isAttacking = false; // to prevent multiple hits in one breath
 
     public int CurrentHealth => currentHealth;
     public float HealthPercent => (float)currentHealth / maxHealth;
@@ -49,7 +49,7 @@ public class DragonBossController : MonoBehaviour
         while (!isDead)
         {
             // trigger attack
-            isAttacking = true;
+            //isAttacking = true;
             anim.SetTrigger("SpecialATrigger");
 
             // your animation should call EnableBreath() / DisableBreath() via events
@@ -58,7 +58,7 @@ public class DragonBossController : MonoBehaviour
             EnableBreath();
             yield return new WaitForSeconds(0.2f);
             DisableBreath();
-            isAttacking = false;
+            //isAttacking = false;
 
             // cooldown before next
             yield return new WaitForSeconds(attackCooldown);

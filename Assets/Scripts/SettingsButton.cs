@@ -1,20 +1,40 @@
 using UnityEngine;
-using UnityEngine.UI; // Add this for Unity UI Button
+using UnityEngine.UI;
 
 public class SettingsButton : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public Button settingsButton; // assign in Inspector
-    public GameObject settingsPanel; // assign in Inspector
-    void Start()
+    [SerializeField] private Button settingsButton;    // your Settings icon/button
+    [SerializeField] private GameObject settingsPanel; // the root Panel GameObject
+
+    private void Awake()
     {
-        settingsButton.onClick.AddListener(ToggleSettingsPanel);
+        // Make sure the panel really starts hidden
+        if (settingsPanel != null)
+            settingsPanel.SetActive(false);
+        else
+            Debug.LogError("SettingsPanel not assigned!", this);
     }
-    
-    private void ToggleSettingsPanel()
-{
-    // flip visibility
-    bool isOpen = settingsPanel.activeSelf;
-    settingsPanel.SetActive(!isOpen);
-}
+
+    private void OnEnable()
+    {
+        if (settingsButton != null)
+            settingsButton.onClick.AddListener(TogglePanel);
+        else
+            Debug.LogError("SettingsButton not assigned!", this);
+    }
+
+    private void OnDisable()
+    {
+        if (settingsButton != null)
+            settingsButton.onClick.RemoveListener(TogglePanel);
+    }
+
+    private void TogglePanel()
+    {
+        if (settingsPanel == null) return;
+
+        bool wasOpen = settingsPanel.activeSelf;
+        settingsPanel.SetActive(!wasOpen);
+        Debug.Log($"SettingsPanel was {wasOpen}, now {!wasOpen}");
+    }
 }
