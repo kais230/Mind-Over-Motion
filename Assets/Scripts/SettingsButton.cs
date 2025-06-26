@@ -3,12 +3,11 @@ using UnityEngine.UI;
 
 public class SettingsButton : MonoBehaviour
 {
-    [SerializeField] private Button settingsButton;    // your Settings icon/button
-    [SerializeField] private GameObject settingsPanel; // the root Panel GameObject
+    [SerializeField] private Button settingsButton;  
+    [SerializeField] private GameObject settingsPanel; 
 
     private void Awake()
     {
-        // Make sure the panel really starts hidden
         if (settingsPanel != null)
             settingsPanel.SetActive(false);
         else

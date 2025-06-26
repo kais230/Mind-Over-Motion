@@ -49,7 +49,9 @@ ax.set_title("Live EEG Signal")
 def bandpower(data, sf, band):
     freqs, psd = welch(data, sf, nperseg=WINDOW_SIZE)
     idx_band = np.logical_and(freqs >= band[0], freqs <= band[1])
-    return np.trapz(psd[idx_band], freqs[idx_band])
+    return np.trapezoid(psd[idx_band], freqs[idx_band])
+
+
 
 # Initialize focus smoothing
 prev_focus = 50
@@ -71,12 +73,13 @@ while True:
 
     # === Focus calculation ===
     alpha = bandpower(eeg_data, SAMPLING_RATE, [8, 12])
-    beta = bandpower(eeg_data, SAMPLING_RATE, [12, 30])
+    beta = bandpower(eeg_data, SAMPLING_RATE, [13, 30])
 
     ratio = beta / (alpha + 1e-6)
     ratio = min(ratio, 3.0)
     normalized_score = np.interp(ratio, [0.5, 2.5], [0, 100])
     focus_score = int(np.clip(normalized_score, 0, 100))
+    
     focus_score = int(0.8 * prev_focus + 0.2 * focus_score)
     prev_focus = focus_score
 

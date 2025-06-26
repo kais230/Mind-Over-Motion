@@ -32,13 +32,13 @@ using UnityEngine.UI;
 
 public class ConcentrationBar : MonoBehaviour
 {
-    [SerializeField] private Image barFill; // Drag your UI Image (Fill) here in Inspector
+    [SerializeField] private Image barFill; 
 
     private float maxConcentration = 100f;
     private float smoothSpeed = 5f;
-    private float changeSpeed = 30f; // Adjust speed of increase/decrease
+    private float changeSpeed = 30f; 
     public float concentration = 0f;
-    FocusReceiver FocusInstance; // Reference to FocusReceiver
+    FocusReceiver FocusInstance;
 
     private void Start()
     {

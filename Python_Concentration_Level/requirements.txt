@@ -1,3 +1,5 @@
-pylsl
 numpy
 scipy
+matplotlib
+pylsl
+muselsl

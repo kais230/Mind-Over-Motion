@@ -45,7 +45,6 @@ public class PlatformFade : MonoBehaviour
 
     IEnumerator Fade(float fromAlpha, float toAlpha, bool enableColliderAtEnd)
     {
-        // on fade‐out, disable collider right away
         if (!enableColliderAtEnd)
             col.enabled = false;
 
@@ -58,7 +57,6 @@ public class PlatformFade : MonoBehaviour
             yield return null;
         }
 
-        // ensure final alpha
         var cf = sr.color; cf.a = toAlpha; sr.color = cf;
 
         // on fade‐in, enable collider once fully visible

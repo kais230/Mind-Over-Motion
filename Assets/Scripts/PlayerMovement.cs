@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
 
     [SerializeField] private LayerMask slopeLayer;
-    //private bool isGrounded = false; // Tracks if the player is on the ground
     private bool isKnockedBack = false;
     [Header("Knockback Settings")]
     [SerializeField] private float knockbackDuration = 0.3f;
@@ -57,16 +56,11 @@ public class PlayerController : MonoBehaviour
                 if (IsGrounded())
                 {
                     Jump();
-                }
-                // else if(OnWall() && wallJumpCounter <= maxWallJumpCounter)
-                // {
-                //     wallJumpCounter++;
-                //     Jump();
-                // }
+                }      
             }
         }
 
-        // Detect falling
+             // Detect falling
             if (body.linearVelocity.y < 0 && !IsGrounded())
             {
                 anim.SetBool("Fall", true);
@@ -100,7 +94,6 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground")) 
         {
-            //isGrounded = true; // Player can jump again
             anim.SetBool("Grounded", true);
             anim.SetBool("Fall", false);
         }
@@ -125,7 +118,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 direction = new Vector2(transform.localScale.x, 0);
         Vector2 origin = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.center.y);
-        Vector2 size = new Vector2(boxCollider.bounds.size.x * 0.6f, boxCollider.bounds.size.y * 0.9f); // Slimmer box
+        Vector2 size = new Vector2(boxCollider.bounds.size.x * 0.6f, boxCollider.bounds.size.y * 0.9f); 
 
         RaycastHit2D hit = Physics2D.BoxCast(origin, size, 0f, direction, 0.1f, wallLayer);
 
@@ -143,18 +136,12 @@ public class PlayerController : MonoBehaviour
     private IEnumerator KnockbackRoutine(Vector2 velocity)
     {
         isKnockedBack = true;
-        anim.SetTrigger("Hurt");           // optional hurt animation
+        anim.SetTrigger("Hurt");        
         body.linearVelocity = velocity;
 
         yield return new WaitForSeconds(knockbackDuration);
 
         isKnockedBack = false;
         knockbackRoutine = null;
-    }
-    private void Die()
-    {
-        // Disable player movement (or restart level)
-        gameObject.SetActive(false);
-        // TODO: Add respawn or game over screen
     }
 }

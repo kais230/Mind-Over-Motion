@@ -1,4 +1,3 @@
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -97,12 +96,28 @@ public class PlayerAttack : MonoBehaviour
         if (collision.CompareTag("Enemy") && isAttacking)
         {
             Debug.Log("Player hit an enemy!");
-            collision.gameObject.GetComponent<Enemy>().TakeDamage(attackDamage);
+            collision.gameObject.GetComponent<Enemy>().TakeDamage((int)attackDamage);
         }
         else if (collision.CompareTag("Boss") && isAttacking)
         {
             collision.GetComponent<DragonBossController>()
              ?.TakeDamage((int)attackDamage);
         }
+        else if (collision.CompareTag("Vampire") && isAttacking)
+        {
+            collision.GetComponent<Vampire>()
+             ?.TakeDamage((int)attackDamage);
+        }
+        else if (collision.CompareTag("StoneGolem") && isAttacking)
+        {
+            collision.GetComponent<StoneGolem>()
+             ?.TakeDamage((int)attackDamage);
+        }
+        else if (collision.CompareTag("CrystalGolem") && isAttacking)
+        {
+            collision.GetComponent<CrystalGolem>()
+             ?.TakeDamage((int)attackDamage);
+        }
+
     }
 }

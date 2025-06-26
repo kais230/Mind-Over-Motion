@@ -67,7 +67,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System; // for DateTime
+using System; 
 public class FocusReceiver : MonoBehaviour
 {
     UdpClient client;
@@ -75,14 +75,10 @@ public class FocusReceiver : MonoBehaviour
     int focusScore = 50; // Default focus score
     public static int CurrentFocusScore => instance?.focusScore ?? 50;
     private static FocusReceiver instance;
+    public bool isConnected = false; 
 
-    public bool isConnected = false; // Flag to check if connected to Muse headset
-
-    // ← new flag to control the receive loop
     private volatile bool running = false;
-
-     public float disconnectTimeout = 5f;
-
+    public float disconnectTimeout = 5f;
     private DateTime lastReceiveUtc;
 
     void Start()
@@ -92,7 +88,6 @@ public class FocusReceiver : MonoBehaviour
 
         client = new UdpClient(5005);
 
-        // start loop
         running = true;
         receiveThread = new Thread(ReceiveData)
         {
@@ -105,7 +100,6 @@ public class FocusReceiver : MonoBehaviour
     {
         IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
 
-        // ← only loop while running is true
         while (running)
         {
             try
@@ -120,23 +114,18 @@ public class FocusReceiver : MonoBehaviour
             }
             catch (SocketException se)
             {
-                // if we closed the client on purpose, just break out
                 if (!running)
                     break;
 
                 Debug.LogError("UDP socket error: " + se.Message);
-                // you can optionally break or continue depending on how resilient you want it
                 break;
             }
             catch (System.Exception e)
             {
                 Debug.LogError("UDP receive error: " + e.Message);
-                // on other exceptions, decide if you want to break or keep going
                 break;
             }
         }
-
-        // Thread will exit here cleanly
     }
 
      void Update()
@@ -151,7 +140,6 @@ public class FocusReceiver : MonoBehaviour
 
     private void ShutdownReceiver()
     {
-        // signal loop to stop
         running = false;
 
         // closing the client will unblock client.Receive()

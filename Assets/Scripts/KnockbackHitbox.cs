@@ -19,7 +19,6 @@ public class KnockbackHitbox : MonoBehaviour
     {
         if (!col.CompareTag("Player")) return;
 
-        // start countdown to knockback
         contactTimer = StartCoroutine(ContactCountdown(col));
     }
 
@@ -27,7 +26,6 @@ public class KnockbackHitbox : MonoBehaviour
     {
         if (!col.CompareTag("Player")) return;
 
-        // left early — cancel the timer
         if (contactTimer != null)
         {
             StopCoroutine(contactTimer);
@@ -40,7 +38,6 @@ public class KnockbackHitbox : MonoBehaviour
         // wait for the required duration
         yield return new WaitForSeconds(contactDuration);
 
-        // still here ⇒ apply knockback + damage
         DoKnockback(col);
 
         contactTimer = null;
@@ -48,10 +45,8 @@ public class KnockbackHitbox : MonoBehaviour
 
     private void DoKnockback(Collider2D col)
     {
-        // 1) damage
         col.GetComponent<PlayerHealth>()?.TakeDamage(contactDamage);
 
-        // 2) knockback via PlayerController if available
         Vector2 dir = (col.transform.position - transform.position).normalized;
         var pc = col.GetComponent<PlayerController>();
         if (pc != null)

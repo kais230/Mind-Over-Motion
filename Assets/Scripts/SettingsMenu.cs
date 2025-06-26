@@ -266,9 +266,6 @@ public class SettingsMenu : MonoBehaviour
     public Button connectButton;
     public Button  settingsButton;
 
-    //[Header("Connection Watcher")]
-    
-
     [Header("Python Launcher")]
     public string pythonLauncher = "py";
 
@@ -283,22 +280,18 @@ public class SettingsMenu : MonoBehaviour
     private Process connectProcess;
     private Process receiveProcess;
 
-    // State machine
     private ConnectionState state = ConnectionState.Disconnected;
 
-    // Timing
     const float pairingWait = 8f;
     const float dataTimeout = 12f;  // total = 20s
 
     void Start()
     {
-        //settingsPanel.SetActive(false);
         if (focusReceiver == null)
             focusReceiver = FindFirstObjectByType<FocusReceiver>();
 
         TransitionToDisconnected();
         connectButton.onClick.AddListener(OnConnectClicked);
-        //settingsButton.onClick.AddListener(ToggleSettingsPanel);
     }
 
     
@@ -335,7 +328,7 @@ public class SettingsMenu : MonoBehaviour
         // 1) Launch pairing script
         connectProcess = StartPython(connectArgs, connectWorkingDir);
 
-        // blind wait for pairing
+        // wait for pairing
         yield return new WaitForSeconds(pairingWait);
 
         // 2) Launch streamer
@@ -360,8 +353,6 @@ public class SettingsMenu : MonoBehaviour
             KillProcesses(); // free port immediately
         }
     }
-
-    // -- State transitions -------------------------
 
     void TransitionToDisconnected()
     {

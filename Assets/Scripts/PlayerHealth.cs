@@ -36,6 +36,16 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void RestoreHealth()
+    {
+        if (playerDead == true){
+            return;
+        }
+
+        currentHealth = 100;   
+        healthBar.value = currentHealth; // Update health bar
+    }
+
     private void Die()
     {
         if (!playerDead)
@@ -44,7 +54,7 @@ public class PlayerHealth : MonoBehaviour
             GetComponent<Animator>().SetTrigger("Death");
 
             GetComponent<PlayerController>().enabled = false;      // Disable movement
-            GetComponent<PlayerAttack>().enabled = false;          // ✅ Disable attacking
+            GetComponent<PlayerAttack>().enabled = false;          // Disable attacking
 
             playerDead = true;
 

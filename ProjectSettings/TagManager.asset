@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - Enemy
   - Boss
+  - Vampire
+  - StoneGolem
+  - CrystalGolem
   layers:
   - Default
   - TransparentFX

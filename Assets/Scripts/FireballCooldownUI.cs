@@ -19,7 +19,6 @@ public class FireballCooldownUI : MonoBehaviour
     {
         originalColor = fireballIcon.color;
         cooldownText.text = "READY!";
-        //cooldownText.enabled = false;
     }
 
     public void TriggerCooldown()
@@ -51,7 +50,6 @@ public class FireballCooldownUI : MonoBehaviour
         cooldownText.text = "READY!";
         // Reset icon and text
         fireballIcon.color = originalColor;
-        //cooldownText.enabled = false;
         isOnCooldown = false;
     }
 
