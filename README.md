@@ -145,5 +145,3 @@ If you need to change the port or address, modify the corresponding Python and U
 - **Unity Brainwave Game**: 2D platformer powered by EEG
 
 ---
-
-For questions or issues, feel free to open an issue or contact the author.
